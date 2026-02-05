@@ -1,0 +1,44 @@
+flowchart TB
+    %% Client Side
+    User[User Browser]
+
+    %% Network Services
+    DNS[DNS Provider]
+    CDN[CDN / Edge Network]
+
+    %% GitHub Platform
+    GitHub[GitHub Platform]
+    Repo[GitHub Repository]
+    Actions[GitHub Actions CI/CD]
+    Pages[GitHub Pages Hosting]
+
+    %% Build Artifacts
+    Build[Static Site Artifacts]
+
+    %% Connections
+    User -->|HTTPS (TCP/IP)| DNS
+    DNS -->|DNS (UDP/TCP)| CDN
+    CDN -->|HTTPS (TLS over TCP)| Pages
+
+    %% GitHub Workflow
+    Developer[Developer]
+    Developer -->|Git Push (HTTPS or SSH)| Repo
+    Repo -->|Webhook (HTTPS)| Actions
+    Actions -->|Build & Deploy (HTTPS)| Pages
+    Pages --> Build
+
+    %% CDN Caching
+    Pages -->|HTTPS| CDN
+
+    %% Protocol Annotations
+    subgraph Network_Layer
+        TCP[TCP/IP]
+        UDP[UDP]
+    end
+
+    subgraph Application_Layer
+        HTTPS[HTTPS]
+        DNS_PROTO[DNS]
+        SSH[SSH]
+        HTTP_API[REST / Webhooks]
+    end
